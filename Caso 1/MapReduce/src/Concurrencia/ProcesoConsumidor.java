@@ -25,6 +25,7 @@ public class ProcesoConsumidor extends Thread{
     public void run(){
         // La ejecucion se da hasta que llegan los tres mensajes de FIN
         while (!terminado){
+            if (buzonRecibir.size()==0) Thread.yield();
             String retirado = buzonRecibir.remove();
             // Se revisa si el mensaje retirado ya es de FIN
             if (retirado.equals("FIN")){

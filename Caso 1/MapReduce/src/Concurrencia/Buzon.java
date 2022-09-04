@@ -52,4 +52,12 @@ public class Buzon {
         return buzon.remove(0);
     }
 
+    public int size(){
+        return buzon.size();
+    }
+
+    public boolean isFull(){
+        return buzon.size() == limit;
+    }
+
 }
