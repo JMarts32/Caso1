@@ -9,91 +9,47 @@ son consultados para lectura y escritura concurrentemente.*/
 public class Buzon {
 
     // Aca se almacenaran la cantidad de elementos que pueden entrar como máximo
-    private List buzon = new ArrayList<Integer>();
+    private final List<String> buzon = new ArrayList<>();
 
     // Es el limite de elementos que pueden entrar en el buzon
-    private int limit;
-
-    // Variable para saber si el buzon esta lleno
-    private boolean lleno;
-
-    // Variable para saber si el buzon esta vacio
-    private boolean vacio;
-
-    // Variable para saber si ya se terminaron los mensajes
-    private boolean corriendo;
-
-    // Varibale para saber si ya se enviaron todos los mensajes de fin
-    private int cantidad;
-
-    // Getter para saber si el buzon esta lleno
-    public synchronized boolean isLleno() {
-        return lleno;
-    }
-
-    // Getter para saber si el buzon esta vacio
-    public synchronized boolean isVacio() {
-        return vacio;
-    }
-
-    public synchronized boolean isCorriendo(){
-        return corriendo;
-    }
+    private final int limit;
 
     // Se hace el constructor que contiene el limite de datos que pueden entrar
     public Buzon (int plimit){
         this.limit = plimit;
-        this.lleno = false;
-        this.vacio =true;
-        this.corriendo = true;
-        this.cantidad = 0;
     }
 
     // Metodo que agrega elementos al buzon
-    public synchronized void store(int elemento){
+    public synchronized void store(String elemento){
         // Dado que el buzon está lleno no se puede agregar más elementos
         while (buzon.size() == limit){
             try{
-                lleno = true;
                 this.wait();
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
 
-        // Se agrega el elemento si es posible
+        // Se agrega el elemento si hay espacio dentro del buzon
         buzon.add(elemento);
-        // Si se esta agregando algo a la lista implica quee no esta vacio
-        vacio = false;
-        this.notify();
+        this.notifyAll();
 
-        // Si el elemento que se esta almacenando es -1 implica que ya se acabaron los mensajes
-        if (elemento == -1){
-            cantidad ++;
-            if (cantidad == 3){
-                corriendo = false;
-            }
-        }
     }
 
     //Metodo que quita elementos del buzon
-    public synchronized Integer remove(){
+    public synchronized String remove(){
         // Dado que no hay elementos dentro del buzon no se pueden sacar
         while (buzon.size() == 0){
             try{
-                vacio = true;
                 wait();
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
 
-        // Se quita el mensaje de la lista
-        int quitar = (Integer) buzon.remove(0);
-        notify();
-        // Si es está quitando un elemento implica que la lista no esta llena
-        lleno = false;
-        return quitar;
+        // Se quita el mensaje de la lista si hay mensajes para quitar :D
+        this.notify();
+        return buzon.remove(0);
     }
 
 }

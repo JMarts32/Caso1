@@ -1,5 +1,10 @@
 package Concurrencia;
 
+/*
+Esta es la clase que modela el primer proceso del MapReduce
+Solo crea los mensajes y los distribuye al primer buzon que
+los mandara a los procesos para ser transformados.
+ */
 public class ProcesoProductor extends Thread{
 
     //Este es el buzon por el que se comunican los productores y consumidores
@@ -11,6 +16,7 @@ public class ProcesoProductor extends Thread{
     // Variable para saber si ya se producieron todos los mensajes
     private int producidos;
 
+    // Constructor del trhead
     public ProcesoProductor(Buzon b, int pporProducir) {
         this.buzon = b;
         this.porProducir = pporProducir;
@@ -22,15 +28,16 @@ public class ProcesoProductor extends Thread{
 
         // Toca almacenar el mensaje que se va a transformar durante la ejecucion
         while (producidos < porProducir){
-            buzon.store(producidos);
-            // Se lleva el control de cuantos mensajes se han producido
+            Thread.yield();
             producidos ++;
+            // Se crean los mensjes M + el numero del mensaje producido
+            buzon.store(("M" + producidos));
         }
 
-        // Se generan -1 cuando ya se acabo la creacion de los mensajes
+        // Se generan FIN cuando ya se acabo la creacion de los mensajes
         for (int i = 0; i<3; i ++){
             // Se crean 3 veces porque se reparten solo 3 threads
-            buzon.store(-1);
+            buzon.store("FIN");
         }
     }
 }
