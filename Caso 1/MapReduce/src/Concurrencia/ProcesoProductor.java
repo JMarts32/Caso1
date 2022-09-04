@@ -28,7 +28,8 @@ public class ProcesoProductor extends Thread{
 
         // Toca almacenar el mensaje que se va a transformar durante la ejecucion
         while (producidos < porProducir){
-            Thread.yield();
+            if(buzon.isFull())
+                Thread.yield();
             producidos ++;
             // Se crean los mensjes M + el numero del mensaje producido
             buzon.store(("M" + producidos));
