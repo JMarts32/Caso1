@@ -54,7 +54,7 @@ public class ProcesoProductorConsumidor extends Thread{
                     sleep(mimir);
 
                     // Cuando despierta el Thread se aplica la transformacion
-                    retirado += ("T" + id + nivel);
+                    retirado += ("T" + id + nivel + " - Demora:" + mimir + "ms | ");
 
                     // Se entrega en el siguente buzon el mensaje transformado
                     buzonEntregar.store(retirado);
