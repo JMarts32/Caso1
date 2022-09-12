@@ -17,9 +17,9 @@ public class ProcesoProductor extends Thread{
     private int producidos;
 
     // Constructor del trhead
-    public ProcesoProductor(Buzon b, int pporProducir) {
+    public ProcesoProductor(Buzon b, int pPorProducir) {
         this.buzon = b;
-        this.porProducir = pporProducir;
+        this.porProducir = pPorProducir;
         this.producidos = 0;
     }
 
@@ -32,7 +32,7 @@ public class ProcesoProductor extends Thread{
                 Thread.yield();
             producidos ++;
             // Se crean los mensjes M + el numero del mensaje producido
-            buzon.store(("M" + producidos));
+            buzon.store(("M" + producidos+"= "));
         }
 
         // Se generan FIN cuando ya se acabo la creacion de los mensajes
